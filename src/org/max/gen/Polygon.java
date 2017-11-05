@@ -71,21 +71,21 @@ public class Polygon implements Cloneable {
 
     public void Draw(Graphics g)
     {
-
             int npoints = Points.size();
             int xpoints[] = new int[npoints];
             int ypoints[] = new int[npoints];
+
             for (int i = 0; i<npoints; i++) {
                 xpoints[i] = Points.get(i).X;
                 ypoints[i] = Points.get(i).Y;
             }
 
-        java.awt.Polygon p = new java.awt.Polygon(xpoints,ypoints,npoints);
+            java.awt.Polygon p = new java.awt.Polygon(xpoints,ypoints,npoints);
 
             g.setColor(new Color (Brush.R, Brush.G, Brush.B,Brush.A));
-            g.drawPolygon(p);
+          //  g.drawPolygon(p);
             g.fillPolygon(p);
-            g.dispose();
+          //  g.dispose();
 
     }
 
