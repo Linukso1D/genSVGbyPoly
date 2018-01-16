@@ -1,10 +1,11 @@
 package org.max.gen;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Polygon implements Cloneable {
+public class Polygon implements Cloneable, Serializable {
 
     public List<Point> Points;
     public Brush Brush;
@@ -101,4 +102,11 @@ public class Polygon implements Cloneable {
         return newpolygon;
     }
 
+    @Override
+    public String toString() {
+        return "Polygon{" +
+                "Points=" + Points +
+                ", Brush=" + Brush +
+                '}';
+    }
 }

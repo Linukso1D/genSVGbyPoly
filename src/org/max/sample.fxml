@@ -20,6 +20,7 @@
             </rowConstraints>
             <children>
                 <ImageView fx:id="originImage" fitHeight="408.0" fitWidth="408.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="generatedimage" fitHeight="408.0" fitWidth="408.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
             </children>
         </GridPane>
         <Button fx:id="loadImage" mnemonicParsing="false" onAction="#loadImage" text="Load Image">

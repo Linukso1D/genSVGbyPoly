@@ -2,12 +2,13 @@ package org.max.gen;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 
-public class Workarea implements Cloneable {
+public class Workarea implements Cloneable, Serializable {
     public List<Polygon> Polygons;
 
     public boolean IsChange;
@@ -94,27 +95,26 @@ public class Workarea implements Cloneable {
         BufferedImage img = new BufferedImage(Helper.Width, Helper.Height, TYPE_INT_ARGB);
 
         Graphics g = img.createGraphics();
-
-
-
-        // Graphics2D g2d;
-        // g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         for(Polygon p :Polygons) {
             p.Draw(g);
         }
-
-        // Polygons.forEach((p) -> p.Draw(g));
-
         return img;
     }
 
 
     @Override
-    protected synchronized Object clone() {
+    public synchronized Object clone() {
         Workarea newarea = new Workarea();
         newarea.Polygons = new ArrayList<Polygon>();
         Polygons.forEach((p) -> newarea.Polygons.add((Polygon) p.clone()));
         return newarea;
     }
 
+    @Override
+    public String toString() {
+        return "Workarea{" +
+                "Polygons=" + Polygons +
+                ", IsChange=" + IsChange +
+                '}';
+    }
 }
