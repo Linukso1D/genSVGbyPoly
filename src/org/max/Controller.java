@@ -4,6 +4,7 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -16,6 +17,7 @@ import java.io.*;
 public class Controller {
 	File selectedFile;
 	Worker w;
+	boolean dialog = true;
 
 	@FXML
 	private void loadImage(ActionEvent event) {
@@ -36,25 +38,49 @@ public class Controller {
 	}
 
 
-
 	@FXML
 	private void exportSvg(ActionEvent event) {
-		System.out.println("ExportSvg event: ");
+		if (!dialog) {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save Image");
+			fileChooser.getExtensionFilters().addAll(
+					new FileChooser.ExtensionFilter("Save data", "*.svg")
+			);
+			File file = fileChooser.showSaveDialog(null);
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+				bw.write(w.toSvg());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle("Information Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("Save must be after start process!");
+			alert.showAndWait();
+		}
 	}
 
 	@FXML
 	private void saveData(ActionEvent event) {
-		try {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Save Image");
-			fileChooser.getExtensionFilters().addAll(
-					new FileChooser.ExtensionFilter("Save data", "*.ser")
-			);
-			File file = fileChooser.showSaveDialog(null);
-
-			this.serialize(w.getWorkarea(), file.getPath());
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (!dialog) {
+			try {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Save Data");
+				fileChooser.getExtensionFilters().addAll(
+						new FileChooser.ExtensionFilter("Save data", "*.ser")
+				);
+				File file = fileChooser.showSaveDialog(null);
+				this.serialize(w.getWorkarea(), file.getPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle("Information Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("Save must be after start process!");
+			alert.showAndWait();
 		}
 	}
 
@@ -83,7 +109,7 @@ public class Controller {
 
 	@FXML
 	private void start(ActionEvent event) {
-		if (selectedFile.canRead()) {
+		if (selectedFile != null && selectedFile.canRead()) {
 			Task<Boolean> task = new Task<Boolean>() {
 				@Override
 				public Boolean call() throws IOException {
@@ -95,7 +121,14 @@ public class Controller {
 					return true;
 				}
 			};
+			dialog = false;
 			new Thread(task).start();
+		} else {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle("Information Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("At first you need select image!");
+			alert.showAndWait();
 		}
 
 	}

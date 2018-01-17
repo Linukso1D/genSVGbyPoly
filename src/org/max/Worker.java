@@ -101,4 +101,8 @@ public class Worker {
 	public void setWorkarea(Workarea w) {
 		this.workarea = w;
 	}
+
+	public String toSvg() {
+		return workarea.toSvg();
+	}
 }
